@@ -9,7 +9,7 @@ public class Registrador {
 	}
 	
 	/**
-	 * Cria registrador usando um nÃºmero binario
+	 * Cria registrador usando um número binario
 	 * @param valor
 	 */
 	public Registrador(String valor) {
@@ -17,7 +17,7 @@ public class Registrador {
 	}
 	
 	/**
-	 * Cria registrador usando um nÃºmero decimal
+	 * Cria registrador usando um número decimal
 	 * @param valor
 	 */
 	public Registrador(int valor) {
@@ -29,6 +29,9 @@ public class Registrador {
 	}
 
 	public void setValor(String valor) {
+		while(valor.length() < 8){
+			valor = "0" + valor;
+		}
 		this.valor = valor;
 	}
 	
@@ -50,6 +53,9 @@ public class Registrador {
 			dec >>= 1;  
 		}  
 
+		while(result.length() < 8){
+			result = "0" + result;
+		}
 		return result;  
 	}  
 
