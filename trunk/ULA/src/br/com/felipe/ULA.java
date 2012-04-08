@@ -3,7 +3,7 @@ package br.com.felipe;
 
 public class ULA {
 
-	private int[]    registradorDeFlags;
+	private String[] registradorDeFlags;
 	private String[] operacoes; 
 	private Registrador resultado;
 
@@ -13,15 +13,23 @@ public class ULA {
 	public ULA() {
 		this.resultado = new Registrador();
 		this.operacoes = new String[]{"0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"};
-		this.registradorDeFlags = new int[16];
+		this.registradorDeFlags = new String[]{"-","-","-","-"};
 	}
 
-	public int[] getRegistradorDeFlags() {
+	public String[] getRegistradorDeFlags() {
 		return registradorDeFlags;
 	}
 
-	public void setRegistradorDeFlags(int[] registradorDeFlags) {
+	public String getRegistradorDeFlags(int index) {
+		return registradorDeFlags[index];
+	}
+	
+	public void setRegistradorDeFlags(String[] registradorDeFlags) {
 		this.registradorDeFlags = registradorDeFlags;
+	}
+
+	public void setRegistradorDeFlags(int index, String valor) {
+		this.registradorDeFlags[index] = valor;
 	}
 
 	public String getResultado() {
@@ -123,6 +131,13 @@ public class ULA {
 	protected String operacaoSoma(Registrador registradorA, Registrador registradorB){
 		Registrador resultado = new Registrador();
 		resultado.setValor(registradorA.getValorDecimal() + registradorB.getValorDecimal());
+		
+		if(resultado.getValorDecimal() > 255 ){
+			resultado.setValor(0);
+			setRegistradorDeFlags(0, "1");
+		}
+		
+		
 		return resultado.getValorBinario();
 	}
 
@@ -145,6 +160,11 @@ public class ULA {
 	 */
 	protected String operacaoIncrementarA(Registrador registradorA){
 		registradorA.setValor(registradorA.getValorDecimal() + 1);
+		
+		if(registradorA.getValorDecimal() > 255 ){
+			registradorA.setValor(0);
+			setRegistradorDeFlags(0, "1");
+		}
 		return registradorA.getValorBinario();
 	}
 
@@ -155,6 +175,11 @@ public class ULA {
 	 */
 	protected String operacaoIncrementarB(Registrador registradorB){
 		registradorB.setValor(registradorB.getValorDecimal() + 1);
+		
+		if(registradorB.getValorDecimal() > 255 ){
+			registradorB.setValor(0);
+			setRegistradorDeFlags(0, "1");
+		}
 		return registradorB.getValorBinario();
 	}
 
@@ -167,6 +192,7 @@ public class ULA {
 	protected String operacaoAisEqualsB(Registrador registradorA, Registrador registradorB){
 		//ver flag
 		boolean eIgual = registradorA.getValorBinario().equalsIgnoreCase(registradorB.getValorBinario());
+		
 		return eIgual ? "1" : "0";
 	}
 
@@ -202,7 +228,8 @@ public class ULA {
 	protected String operacaoSubtracaoAMenosB(Registrador registradorA, Registrador registradorB){
 		int result = registradorA.getValorDecimal() - registradorB.getValorDecimal();
 		if(result < 0){
-			resultado.setValor(0);			
+			resultado.setValor(0);
+			setRegistradorDeFlags(1, "1");
 		}else{
 			resultado.setValor(result);
 		}
@@ -241,7 +268,8 @@ public class ULA {
 		//ver flag
 		int result = registradorB.getValorDecimal() - registradorA.getValorDecimal();
 		if(result < 0){
-			resultado.setValor(0);			
+			resultado.setValor(0);
+			setRegistradorDeFlags(1, "1");
 		}else{
 			resultado.setValor(result);
 		}
@@ -310,9 +338,11 @@ public class ULA {
 	 */
 	protected String operacaoShiftLeftRegister(Registrador registrador){
 		//ver flag
-		//pego do segundo até o ultimo registro;
 		String slr = "0" + registrador.getValorBinario().substring(0, registrador.getValorBinario().length()-1);
+		setRegistradorDeFlags(3, String.valueOf(registrador.getValorBinario().charAt(registrador.getValorBinario().length())));
+
 		registrador.setValor(slr);
+		
 		return registrador.getValorBinario();
 	}
 
@@ -324,8 +354,8 @@ public class ULA {
 	 */
 	protected String operacaoShiftRightRegister(Registrador registrador){
 		//ver flag
-		//pego do primeiro até o penultimo;
 		String slr = registrador.getValorBinario().substring(1, registrador.getValorBinario().length()) + "0";
+		setRegistradorDeFlags(3, String.valueOf(registrador.getValorBinario().charAt(0)));
 		registrador.setValor(slr);
 		return registrador.getValorBinario();
 	}
@@ -338,6 +368,10 @@ public class ULA {
 	 */
 	protected String operacaoDecrescimoB(Registrador registrador){
 		registrador.setValor(registrador.getValorDecimal() - 1);
+		if(registrador.getValorDecimal() < 0){
+			resultado.setValor(0);
+			setRegistradorDeFlags(1, "1");
+		}
 		return registrador.getValorBinario();
 	}
 
