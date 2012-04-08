@@ -1,6 +1,6 @@
 package br.com.felipe;
 
-public class Registrador {
+public class Registrador implements Cloneable {
 	
 	private String  valor;
 	
@@ -77,4 +77,7 @@ public class Registrador {
 		return result;  
 	}  
 
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
