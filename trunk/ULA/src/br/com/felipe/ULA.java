@@ -1,10 +1,10 @@
 package br.com.felipe;
 
+
 public class ULA {
 
 	private int[]    registradorDeFlags;
 	private String[] operacoes; 
-	private boolean padrao;
 	private Registrador resultado;
 
 	/**
@@ -12,7 +12,7 @@ public class ULA {
 	 */
 	public ULA() {
 		this.resultado = new Registrador();
-		this.operacoes = new String[]{"0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1100","1101","1110","1111"};
+		this.operacoes = new String[]{"0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"};
 		this.registradorDeFlags = new int[16];
 	}
 
@@ -44,56 +44,70 @@ public class ULA {
 
 	public String executar(String operacao, Registrador registradorA, Registrador registradorB){
 
-		Registrador registrador = new Registrador();
+		
+		Registrador aTemp = null;
+		Registrador bTemp = null;
+		
+		try {
+		
+			aTemp = (Registrador) registradorA.clone();
+			bTemp = (Registrador) registradorB.clone();
+		
+		} catch (CloneNotSupportedException e) {
+			aTemp = registradorA;
+			bTemp = registradorB;
+		}
+	
+	
 		String tempOperacao = String.valueOf(binaryToDec(operacao));
 		
 		if(tempOperacao.equalsIgnoreCase("0")){
-			resultado.setValor(operacaoSoma( registradorA, registradorB));
+			resultado.setValor(operacaoSoma( aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("1")){
-			resultado.setValor(operacaoInversaoA(registradorA));
+			resultado.setValor(operacaoInversaoA(aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("2")){
-			resultado.setValor(operacaoIncrementarA(registradorA));
+			resultado.setValor(operacaoIncrementarA(aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("3")){
-			resultado.setValor(operacaoIncrementarB(registradorB));
+			resultado.setValor(operacaoIncrementarB(bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("4")){
-			resultado.setValor(operacaoAisEqualsB(registradorA, registradorB));
+			resultado.setValor(operacaoAisEqualsB(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("5")){
-			resultado.setValor(operacaoAMaiorB(registradorA, registradorB));
+			resultado.setValor(operacaoAMaiorB(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("6")){
-			resultado.setValor(operacaoInversaoB(registradorB));
+			resultado.setValor(operacaoInversaoB(bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("7")){
-			resultado.setValor(operacaoSubtracaoAMenosB(registradorA, registradorB));
+			resultado.setValor(operacaoSubtracaoAMenosB(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("8")){
-			resultado.setValor(operacaoReceberA_B(registradorA, registradorB));
+			resultado.setValor(operacaoReceberA_B(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("9")){
-			resultado.setValor(operacaoReceberB_A(registradorB, registradorA));
+			resultado.setValor(operacaoReceberB_A(bTemp, aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("10")){
-			resultado.setValor(operacaoSubtracaoBMenosA(registradorB, registradorA));
+			resultado.setValor(operacaoSubtracaoBMenosA(bTemp, aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("11")){
-			resultado.setValor(operacaoOUA_B(registradorA, registradorB));
+			resultado.setValor(operacaoOUA_B(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("12")){
-			resultado.setValor(operacaoEA_B(registradorA, registradorB));
+			resultado.setValor(operacaoEA_B(aTemp, bTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("13")){
-			resultado.setValor(operacaoShiftLeftRegister(registrador));
+			resultado.setValor(operacaoShiftLeftRegister(aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("14")){
-			resultado.setValor(operacaoShiftRightRegister(registrador));
+			resultado.setValor(operacaoShiftRightRegister(aTemp));
 		}
 		if(tempOperacao.equalsIgnoreCase("15")){
-			resultado.setValor(operacaoDecrescimo(registrador));
+			resultado.setValor(operacaoDecrescimoB(bTemp));
 		}
 
 		return resultado.getValorBinario();
@@ -186,11 +200,13 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoSubtracaoAMenosB(Registrador registradorA, Registrador registradorB){
-		System.out.println("operacaoSubtracaoAMenosB");
-		//Registrador resultado = new Registrador();
-		//resultado.setValor(registradorA.getValorDecimal() + registradorB.getValorDecimal());
-		//return resultado.getValorBinario();
-		return "0000";
+		int result = registradorA.getValorDecimal() - registradorB.getValorDecimal();
+		if(result < 0){
+			resultado.setValor(0);			
+		}else{
+			resultado.setValor(result);
+		}
+		return resultado.getValorBinario();
 	}
 
 	/**
@@ -200,7 +216,6 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoReceberA_B(Registrador registradorA, Registrador registradorB){
-		System.out.println("operacaoReceberA_B");
 		registradorA.setValor(registradorB.getValorBinario());
 		return registradorA.getValorBinario();
 	}
@@ -212,7 +227,6 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoReceberB_A(Registrador registradorB, Registrador registradorA){
-		System.out.println("operacaoReceberB_A");
 		registradorB.setValor(registradorA.getValorBinario());
 		return registradorB.getValorBinario();
 	}
@@ -224,11 +238,14 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoSubtracaoBMenosA(Registrador registradorB, Registrador registradorA){
-		System.out.println("operacaoSubtracaoBMenosA");
-		//Registrador resultado = new Registrador();
-		//resultado.setValor(registradorA.getValorDecimal() + registradorB.getValorDecimal());
-		//return resultado.getValorBinario();
-		return "0000";
+		//ver flag
+		int result = registradorB.getValorDecimal() - registradorA.getValorDecimal();
+		if(result < 0){
+			resultado.setValor(0);			
+		}else{
+			resultado.setValor(result);
+		}
+		return resultado.getValorBinario();
 	}
 
 	/**
@@ -268,9 +285,9 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoShiftLeftRegister(Registrador registrador){
-		System.out.println("operacaoShiftLeftRegister");
+		//ver flag
 		//pego do segundo até o ultimo registro;
-		String slr = registrador.getValorBinario().substring(1, registrador.getValorBinario().length()-1) + "0";
+		String slr = "0" + registrador.getValorBinario().substring(0, registrador.getValorBinario().length()-1);
 		registrador.setValor(slr);
 		return registrador.getValorBinario();
 	}
@@ -282,9 +299,9 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoShiftRightRegister(Registrador registrador){
-		System.out.println("operacaoShiftRightRegister");
+		//ver flag
 		//pego do primeiro até o penultimo;
-		String slr = "0" + registrador.getValorBinario().substring(0, registrador.getValorBinario().length()-2);
+		String slr = registrador.getValorBinario().substring(1, registrador.getValorBinario().length()) + "0";
 		registrador.setValor(slr);
 		return registrador.getValorBinario();
 	}
@@ -295,8 +312,7 @@ public class ULA {
 	 * @param registradorB
 	 * @return
 	 */
-	protected String operacaoDecrescimo(Registrador registrador){
-		System.out.println("operacaoDecrescimo");
+	protected String operacaoDecrescimoB(Registrador registrador){
 		registrador.setValor(registrador.getValorDecimal() - 1);
 		return registrador.getValorBinario();
 	}
