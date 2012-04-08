@@ -255,12 +255,24 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoOUA_B(Registrador registradorA, Registrador registradorB){
-		System.out.println("operacaoOUA_B");
-		//implementar
-		//Registrador resultado = new Registrador();
-		//resultado.setValor(registradorA.getValorDecimal() + registradorB.getValorDecimal());
-		//return resultado.getValorBinario();
-		return "0000";
+		String a = registradorA.getValorBinario();
+		String b = registradorB.getValorBinario();
+		String aOrB = "";
+		
+		for(int i=0 ; i < Registrador.QTDBITS ; i++) {
+
+			if(a.charAt(i) == '1' || b.charAt(i) == '1'){
+
+				aOrB = aOrB + "1";
+
+			}else{
+
+				aOrB = aOrB + "0";
+			}
+
+		}
+
+		return aOrB;
 	}
 
 	/**
@@ -270,12 +282,24 @@ public class ULA {
 	 * @return
 	 */
 	protected String operacaoEA_B(Registrador registradorA, Registrador registradorB){
-		System.out.println("operacaoEA_B");
-		//implementar
-		//Registrador resultado = new Registrador();
-		//resultado.setValor(registradorA.getValorDecimal() + registradorB.getValorDecimal());
-		//return resultado.getValorBinario();
-		return "0000";
+		String a = registradorA.getValorBinario();
+		String b = registradorB.getValorBinario();
+		String aOrB = "";
+		
+		for(int i=0 ; i < Registrador.QTDBITS ; i++) {
+			
+			if(a.charAt(i) == '1' && b.charAt(i) == '1'){
+				
+				aOrB = aOrB + "1";
+				
+			}else{
+				
+				aOrB = aOrB + "0";
+			}
+			
+		}
+		
+		return aOrB;
 	}
 
 	/**
