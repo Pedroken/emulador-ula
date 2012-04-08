@@ -2,6 +2,7 @@ package br.com.felipe;
 
 public class Registrador implements Cloneable {
 	
+	public static final int QTDBITS = 8;
 	private String  valor;
 	
 	public Registrador() {
@@ -13,7 +14,7 @@ public class Registrador implements Cloneable {
 	 * @param valor
 	 */
 	public Registrador(String valor) {
-		this.valor = valor;
+		this.valor = completaBits(valor);;
 	}
 	
 	/**
@@ -29,10 +30,7 @@ public class Registrador implements Cloneable {
 	}
 
 	public void setValor(String valor) {
-		while(valor.length() < 8){
-			valor = "0" + valor;
-		}
-		this.valor = valor;
+		this.valor = completaBits(valor);;
 	}
 	
 	public void setValor(int valor) {
@@ -52,11 +50,7 @@ public class Registrador implements Cloneable {
 			result = (dec & 1) + result;  
 			dec >>= 1;  
 		}  
-
-		while(result.length() < 8){
-			result = "0" + result;
-		}
-		return result;  
+		return completaBits(result);
 	}  
 
 	/** 
@@ -79,5 +73,12 @@ public class Registrador implements Cloneable {
 
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+	
+	private static String completaBits(String bitsACompletar){
+		while(bitsACompletar.length() < Registrador.QTDBITS){
+			bitsACompletar = "0" + bitsACompletar;
+		}
+		return bitsACompletar;
 	}
 }

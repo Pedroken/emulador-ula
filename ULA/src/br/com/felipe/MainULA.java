@@ -1,11 +1,12 @@
 package br.com.felipe;
 
 import java.util.Scanner;
+import static java.lang.Math.random;;
 
 public class MainULA {
 
-	private static Registrador registradorA = new Registrador(10);
-	private static Registrador registradorB = new Registrador(5);
+	private static Registrador registradorA = new Registrador((int)(random() * 255));
+	private static Registrador registradorB = new Registrador((int)(random() * 255));
 	private static ULA ula = new ULA();
 
 
@@ -99,7 +100,8 @@ public class MainULA {
 				}	
 
 			} catch (Exception e) {
-				System.out.println("Ocorreu um erro");
+				System.out.println("Ocorreu um erro: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 
@@ -138,11 +140,10 @@ public class MainULA {
 
 		//solução para o console do windows
 		/*
-		String[] comandos = new String[]{"cmd","cls"};
+		String[] comandos = new String[]{"cmd","cls","clear"};
 		Runtime run = Runtime.getRuntime();
 		run.exec(comados);
 		 */
-
 
 		//solução para o console do java
 		for(int i= 0 ; i<50 ; i++ ){
