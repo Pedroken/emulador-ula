@@ -59,7 +59,11 @@ public class MainULA {
 					break;
 
 				case 5:
-					System.out.println(5);
+					System.out.print("\nRegistrador de flags: ");
+					for(int i = 0 ; i < ula.getRegistradorDeFlags().length ; i++){
+						System.out.print(ula.getRegistradorDeFlags(i) + " ");
+					}
+					imprimirMenuPrincipal();
 					break;
 
 				case 6:
