@@ -1,0 +1,1 @@
+emulador de ula para um trabalho em arquitetura de computadores.
